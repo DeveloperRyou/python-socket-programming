@@ -71,15 +71,15 @@ class NetworkSocket:
     def tcp_recv(self) -> bytes:
         # TCP socket(tcp_socket)으로 들어오는 packet의 data 반환 
         if self.tcp_socket is None:
-            return None
+            return 0
         data = self.tcp_socket.recv(1024)
         return data
 
     def udp_recv(self) -> bytes:
         # UDP socket(udp_socket)으로 들어오는 packet의 data 반환 
         if self.udp_socket is None:
-            return None
-        data = self.udp_socket.recv(1024)
+            return 0
+        data, addr = self.udp_socket.recvfrom(1024)
         return data
 
 
