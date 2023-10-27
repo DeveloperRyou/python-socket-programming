@@ -15,82 +15,72 @@ class NetworkSocket:
     @staticmethod
     def tcp_server_socket(host: str, port: int) -> socket.socket:
         # TCP server socket 생성
-        #
-        #  
-        #
-        return None
+        serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        serverSocket.bind((host, port))
+        serverSocket.listen(1)
+        return serverSocket
 
     @staticmethod
     def tcp_server_connect(server_socket: socket.socket) -> Tuple[socket.socket, any]:
         # Server_socket을 통해 client와의 connection 생성 
         # 생성된 connection socket(conn)과 client의 address(tcp_client_addr) 반환 
-        #
-        #  
-        #
-        return None, None
+        clientSocket, addr = server_socket.accept()
+        return clientSocket, addr
 
     @staticmethod
     def tcp_client_socket(host: str, port: int) -> socket.socket:
         # TCP client socket 생성
         # Server에 connection을 요청하고, server와 client 간 tcp socket(tcp_client_socket) 반환
-        #
-        #
-        #
-        return None
+        clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        clientSocket.connect((host, port))
+        return clientSocket
 
     @staticmethod
     def udp_server_socket(host: str, port: int) -> socket.socket:
         # UDP server socket 생성
-        #
-        #  
-        #
-        return None
+        serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        serverSocket.bind((host, port))
+        return serverSocket
 
     @staticmethod
     def udp_server_connect(udp_server_socket: socket.socket):
         # udp_client_socket 함수가 전송한 packet으로부터 client의 udp address(udp_client_addr) 반환 
-        #
-        #
-        #
-        return None
+        data, addr = udp_server_socket.recvfrom(1024)
+        return addr
 
     @staticmethod
     def udp_client_socket(host: str, port: int) -> socket.socket:
         # UDP client socket 생성
         # UDP 통신으로 server에 packet을 전송하고 udp client socket(udp_client_socket) 반환
-        # 
-        #
-        #  
-        #
-        return None
+        clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        clientSocket.sendto("".encode(ENCODING), (host, port))
+        return clientSocket
 
     def tcp_send(self, data: bytes) -> None:
         # TCP socket(tcp_socket)을 통해 입력 받은 data 전송 
-        #
-        #  
-        #
-        pass
+        if self.tcp_socket is None:
+            return None
+        self.tcp_socket.send(data)
         
     def udp_send(self, data: bytes) -> None:
         # UDP socket(udp_socket)를 통해 상대방의 udp 주소(target_udp_addr)로 입력받은 data 전송 
-        #
-        #  
-        #
-        pass
+        if self.udp_socket is None:
+            return None
+        self.udp_socket.sendto(data, self.target_udp_addr)
 
     def tcp_recv(self) -> bytes:
-        # TCP socket(tcp_socket)으로 들어오는 packet의 data 반환  
-        #
-        # 
-        #
-        return None
+        # TCP socket(tcp_socket)으로 들어오는 packet의 data 반환 
+        if self.tcp_socket is None:
+            return None
+        data = self.tcp_socket.recv(1024)
+        return data
 
     def udp_recv(self) -> bytes:
         # UDP socket(udp_socket)으로 들어오는 packet의 data 반환 
-        #
-        # 
-        #
-        return None
+        if self.udp_socket is None:
+            return None
+        data = self.udp_socket.recv(1024)
+        return data
 
 
     def close(self) -> None:
